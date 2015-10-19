@@ -13,43 +13,70 @@ import java.util.Random;
  *
  */
 public class Grid {
-	private HashMap<Case, Agent> cases;
+	private HashMap<Square, Agent> squares;
 	
-	public Grid(int it) {
-		this.cases = new HashMap<Case, Agent>();
-
-		for(int i = 0; i < it; i++) {
-			for(int j = 0; j < it; j++) {
-				Case c = new Case(new Position(i, j));
+	public Grid(int gridSize) {
+		this.squares = new HashMap<Square, Agent>();
+		
+		this.initGrid(gridSize);
+	}
+	
+	/**
+	 * 
+	 * @param gridSize
+	 */
+	private void initGrid(int gridSize) {
+		for(int row = 0; row < gridSize; row++) {
+			for(int column = 0; column < gridSize; column++) {
+				Square square = new Square(new Position(row, column));
 				
-				this.cases.put(c, null);
+				this.squares.put(square, null);
 			}
 		}
 	}
-		
-	public void setAgent(Agent agent) {		
+	
+	/**
+	 * 
+	 * @param agents
+	 */
+	public void placeAgents(ArrayList<Agent> agents) {		
 		Random random = new Random();
-		ArrayList<Case> cases = new ArrayList<Case>(this.cases.keySet());
-		Case randomCase = cases.get(random.nextInt(cases.size()));
 		
-		if(this.cases.get(randomCase) == null) {
-			this.cases.put(randomCase, agent);
-			agent.setCurrentPosition(randomCase.getPosition());
+		for(Agent agent : agents) {
+			int cursor = 0;
+			Square randomSquare = this.getSquaresSet().get(random.nextInt(this.squares.size()));
+			while(this.squares.get(randomSquare) != null && cursor < this.squares.size()) {
+				randomSquare = this.getSquaresSet().get(random.nextInt(this.squares.size()));
+				cursor++;
+			}
+			
+			if(this.squares.get(randomSquare) == null) {
+				this.squares.put(randomSquare, agent);
+				agent.setCurrentSquare(randomSquare);
+			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<Square> getSquaresSet() {
+		return new ArrayList<Square>(this.squares.keySet());
 	}
 
 	/**
 	 * @return the cases
 	 */
-	public HashMap<Case, Agent> getCases() {
-		return cases;
+	public HashMap<Square, Agent> getSquares() {
+		return squares;
 	}
 
 	/**
 	 * @param cases the cases to set
 	 */
-	public void setCases(HashMap<Case, Agent> cases) {
-		this.cases = cases;
+	public void setSquares(HashMap<Square, Agent> squares) {
+		this.squares = squares;
 	}
 	
 }

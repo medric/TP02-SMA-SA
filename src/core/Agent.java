@@ -12,8 +12,8 @@ import java.util.HashMap;
  */
 public class Agent implements Runnable {
 	private String name;
-	private Position currentPosition;
-	private Position targetPosition;
+	private Square currentSquare;
+	private Square targetedSquare;
 	private Inbox inbox;
 	
 	public Agent(String name) {
@@ -21,8 +21,7 @@ public class Agent implements Runnable {
 	}
 	
 	public void run() {
-		boolean puzzleDone = false;
-		while(!puzzleDone) {
+		while(!this.targetReached()) {
 			
 		}
 	}
@@ -33,33 +32,37 @@ public class Agent implements Runnable {
 	public void free() {
 		
 	}
+	
+	private boolean targetReached() {
+		return currentSquare.equals(targetedSquare);
+	}
 
 	/**
 	 * @return the currentPosition
 	 */
-	Position getCurrentPosition() {
-		return currentPosition;
+	public Square getCurrentSquare() {
+		return currentSquare;
 	}
 
 	/**
 	 * @param currentPosition the currentPosition to set
 	 */
-	void setCurrentPosition(Position currentPosition) {
-		this.currentPosition = currentPosition;
+	public void setCurrentSquare(Square currentSquare) {
+		this.currentSquare = currentSquare;
 	}
 
 	/**
 	 * @return the targetPosition
 	 */
-	Position getTargetPosition() {
-		return targetPosition;
+	public Square getTargetedSquare() {
+		return targetedSquare;
 	}
 
 	/**
 	 * @param targetPosition the targetPosition to set
 	 */
-	void setTargetPosition(Position targetPosition) {
-		this.targetPosition = targetPosition;
+	public void setTargetedSquare(Square targetedSquare) {
+		this.targetedSquare = targetedSquare;
 	}
 
 	/**
