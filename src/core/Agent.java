@@ -30,7 +30,7 @@ public class Agent implements Runnable {
 	}
 	
 	public void free() {
-		
+		// free grid (agent = null)
 	}
 	
 	private boolean targetReached() {
