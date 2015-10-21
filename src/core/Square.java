@@ -9,8 +9,7 @@ package core;
  */
 public class Square {
 	private Position position;
-	private Agent agent;
-	
+		
 	public Square(Position position) {
 		this.setPosition(position);
 	}

@@ -1,10 +1,8 @@
 package core;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-/**
- * 
- */
+import java.util.ArrayList;
+
+import core.Action;
 
 /**
  * @author medric
@@ -15,24 +13,60 @@ public class Agent implements Runnable {
 	private Square currentSquare;
 	private Square targetedSquare;
 	private Inbox inbox;
+	private Grid grid;
 	
 	public Agent(String name) {
 		this.setName(name);
+
 	}
 	
 	public void run() {
 		while(!this.targetReached()) {
+			ArrayList<Message> messages = this.getInbox().getMessages(this);
 			
+			if(messages.size() == 0 || messages == null) {
+				this.move();
+			} else {
+				for(Message message : messages) {
+					switch(message.getAction()) {
+					case Request: 
+						break;
+					case Move:
+						break;
+					case FreePosition: 
+						break;
+					}
+				}
+			}
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void move() {
+		for(Square neighbor : this.getGrid().getNeighbors(this.getCurrentSquare())) {
+			if(this.getGrid().isSquareFree(neighbor)) {
+				this.getGrid().getSquares().put(this.getCurrentSquare(), null);
+				this.getGrid().getSquares().put(neighbor, this);
+				this.setCurrentSquare(neighbor);
+				break;
+			} /*else {
+				Message message = new Message(this, this.getGrid().getSquares().get(neighbor), Action.FreePosition);
+				this.getInbox().send(message);
+			}*/
+		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void free() {
-		// free grid (agent = null)
 	}
 	
+	/*
+	 * 
+	 */
 	private boolean targetReached() {
 		return currentSquare.equals(targetedSquare);
 	}
@@ -68,28 +102,42 @@ public class Agent implements Runnable {
 	/**
 	 * @return the inbox
 	 */
-	Inbox getInbox() {
+	public Inbox getInbox() {
 		return inbox;
 	}
 
 	/**
 	 * @param inbox the inbox to set
 	 */
-	void setInbox(Inbox inbox) {
+	public void setInbox(Inbox inbox) {
 		this.inbox = inbox;
 	}
 
 	/**
 	 * @return the name
 	 */
-	private String getName() {
+	public String getName() {
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	private void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the grid
+	 */
+	public Grid getGrid() {
+		return grid;
+	}
+
+	/**
+	 * @param grid the grid to set
+	 */
+	public void setGrid(Grid grid) {
+		this.grid = grid;
 	}
 }

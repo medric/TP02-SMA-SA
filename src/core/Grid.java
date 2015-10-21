@@ -1,7 +1,9 @@
 package core;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -58,6 +60,51 @@ public class Grid {
 	}
 	
 	/**
+	 * Get square neighbors
+	 * @param square
+	 * @return
+	 */
+	public ArrayList<Square> getNeighbors(Square square) {
+		ArrayList<Square> neighbors = new ArrayList<Square>();
+		int index = this.getSquaresSet().indexOf(square);
+		int gridSize = this.getSquares().size();
+		int gridWidth = (int)Math.sqrt(gridSize);
+		
+		// right neighbors
+		if(square.getPosition().getX() < gridWidth) {
+			neighbors.add(this.getSquaresSet().get(index + 1));
+		} 
+		
+		// left neighbors
+		if(square.getPosition().getX() > 0) {
+			neighbors.add(this.getSquaresSet().get(index - 1));
+		}
+		
+		// bottom neighbors
+		if(square.getPosition().getX() == 0 && square.getPosition().getY() < gridWidth) {	
+			int target = index + gridWidth;
+			neighbors.add(this.getSquaresSet().get(target));
+		} 
+		
+		// top neighbors
+		if(square.getPosition().getY() > 0) {	
+			int target = index - gridWidth;
+			neighbors.add(this.getSquaresSet().get(target));
+		} 
+		
+		return neighbors;
+	}
+	
+	/**
+	 * 
+	 * @param square
+	 * @return
+	 */
+	public boolean isSquareFree(Square square) {
+		return this.getSquares().get(square) == null;
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */
@@ -79,4 +126,19 @@ public class Grid {
 		this.squares = squares;
 	}
 	
+	/**
+	 * Render grid
+	 */
+	public void render() {
+		for (Map.Entry<Square, Agent> entry : this.getSquares().entrySet()) {
+			String output = "(" + entry.getKey().getPosition().getX() + "-";
+			output += entry.getKey().getPosition().getY() + ") :";
+			if(entry.getValue() != null) {
+				output += entry.getValue().getName();
+			} else {
+				output += "free";
+			}
+			System.out.println(output);
+		}
+	}
 }

@@ -36,7 +36,12 @@ public class Main {
 		agents.add(square);
 		agents.add(diamond);
 		
-		grid.placeAgents(agents);
+		//grid.placeAgents(agents);
+		circle.setCurrentSquare(grid.getSquaresSet().get(2));
+		star.setCurrentSquare(grid.getSquaresSet().get(4));
+		triangle.setCurrentSquare(grid.getSquaresSet().get(3));
+		square.setCurrentSquare(grid.getSquaresSet().get(8));
+		diamond.setTargetedSquare(grid.getSquaresSet().get(7));
 		
 		// Set targets (squares)
 		circle.setTargetedSquare(grid.getSquaresSet().get(0));
@@ -47,6 +52,14 @@ public class Main {
 		
 		Inbox inbox = new Inbox();
 		
+		for(Agent agent : agents) {
+			inbox.addAgent(agent);
+			agent.setInbox(inbox);
+			agent.setGrid(grid);
+			
+			// Run thread for each agent
+			Thread t = new Thread(agent);
+			t.start();
+		}
 	}
-
 }
