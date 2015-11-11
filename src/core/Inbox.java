@@ -12,7 +12,11 @@ import java.util.HashMap;
  */
 public class Inbox {
 	private HashMap<Agent, ArrayList<Message>> messages;
-
+	
+	public Inbox() {
+		this.messages = new HashMap<Agent, ArrayList<Message>>();
+	}
+	
 	/**
 	 * @return the messages
 	 */

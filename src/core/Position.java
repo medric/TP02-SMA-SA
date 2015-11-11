@@ -6,7 +6,7 @@ public class Position {
 	
 	public Position(int x, int y) {
 		this.setX(x);
-		this.setX(y);
+		this.setY(y);
 	}
 	
 	/**

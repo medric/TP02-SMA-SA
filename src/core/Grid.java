@@ -66,27 +66,27 @@ public class Grid {
 	 */
 	public ArrayList<Square> getNeighbors(Square square) {
 		ArrayList<Square> neighbors = new ArrayList<Square>();
-		int index = this.getSquaresSet().indexOf(square);
+		int index = this.getSquaresSet().indexOf(square) - 1;
 		int gridSize = this.getSquares().size();
 		int gridWidth = (int)Math.sqrt(gridSize);
 		
-		// right neighbors
-		if(square.getPosition().getX() < gridWidth) {
+		// right neighbor
+		if(square.getPosition().getX() < gridWidth - 1) {
 			neighbors.add(this.getSquaresSet().get(index + 1));
 		} 
 		
-		// left neighbors
+		// left neighbor
 		if(square.getPosition().getX() > 0) {
 			neighbors.add(this.getSquaresSet().get(index - 1));
 		}
 		
-		// bottom neighbors
-		if(square.getPosition().getX() == 0 && square.getPosition().getY() < gridWidth) {	
+		// bottom neighbor
+		if(/*square.getPosition().getX() == 0 &&*/ square.getPosition().getY() < gridWidth - 1) {	
 			int target = index + gridWidth;
 			neighbors.add(this.getSquaresSet().get(target));
 		} 
 		
-		// top neighbors
+		// top neighbor
 		if(square.getPosition().getY() > 0) {	
 			int target = index - gridWidth;
 			neighbors.add(this.getSquaresSet().get(target));
@@ -140,5 +140,19 @@ public class Grid {
 			}
 			System.out.println(output);
 		}
+		
+		System.out.println("________________");
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<Square> getShortestWay(Square startingSquare, Square targetedSquare) {
+		ArrayList<Square> shortestWay = new ArrayList<Square>();
+		
+		// TODO
+		
+		return shortestWay;
 	}
 }
