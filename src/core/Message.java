@@ -11,11 +11,13 @@ public class Message {
 	private Agent emitter;
 	private Agent recipient;
 	private Action action;
+	private Square target;
 	
-	public Message(Agent emitter, Agent recipient, Action action) {
+	public Message(Agent emitter, Agent recipient, Action action, Square target) {
 		this.setAction(action);
 		this.setEmitter(emitter);
 		this.setRecipient(recipient);
+		this.setTarget(target);
 	}
 
 	/**
@@ -58,5 +60,13 @@ public class Message {
 	 */
 	public void setAction(Action action) {
 		this.action = action;
+	}
+
+	private Square getTarget() {
+		return target;
+	}
+
+	private void setTarget(Square target) {
+		this.target = target;
 	}
 }
