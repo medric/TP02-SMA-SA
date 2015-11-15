@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Random;
 
 import view.GridView;
@@ -18,11 +19,13 @@ import view.GridView;
  */
 public class Grid {
 	private HashMap<Square, Agent> squares;
-	private GridView gridView;
+	//private GridView gridView;
+	private int size;
 	
 	public Grid(int gridSize) {
 		this.squares = new HashMap<Square, Agent>();
-		this.gridView = new GridView(gridSize, gridSize);
+		//this.gridView = new GridView(gridSize, gridSize);
+		this.setSize(gridSize);
 		
 		this.initGrid(gridSize);
 	}
@@ -158,5 +161,13 @@ public class Grid {
 		// TODO
 		
 		return shortestWay;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

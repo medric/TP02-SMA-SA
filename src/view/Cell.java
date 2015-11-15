@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -14,6 +15,12 @@ public class Cell extends JPanel {
 		this.setGridColumn(gridColumn);
 		
 		this.setBorder(new LineBorder(Color.gray));
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+	        ///g.drawImage(bgImage, 0, 0, null);
 	}
 
 	private int getGridRow() {
