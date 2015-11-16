@@ -94,10 +94,10 @@ public class Grid {
 		} 
 		
 		// top neighbor
-		/*if(square.getPosition().getY() > 0) {	
+		if(square.getPosition().getY() > 0) {	
 			int target = index - gridWidth;
 			neighbors.add(this.getSquaresSet().get(target));
-		} */
+		} 
 		
 		return neighbors;
 	}

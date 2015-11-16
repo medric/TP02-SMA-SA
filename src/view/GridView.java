@@ -40,7 +40,6 @@ public class GridView extends JFrame implements Observer {
 	public GridView(Grid grid) {
 		super("Interaction multi-agents");
 		
-		//this.cells = new Cell[this.getRows()][this.getColumns()];
 		this.grid = grid;
 		GridLayout gridLayout = new GridLayout(this.grid.getSize(), 
 													this.grid.getSize()); //Create GridLayout 
@@ -63,7 +62,7 @@ public class GridView extends JFrame implements Observer {
 		if(obs instanceof Agent) {			
 			try {
 				this.draw();
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -3,6 +3,7 @@ package core;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.concurrent.Semaphore;
 
 import core.Action;
 
@@ -17,6 +18,7 @@ public class Agent extends Observable implements Runnable {
 	private Inbox inbox;
 	private Grid grid;
 	private Color bg;
+	static Semaphore mutex = new Semaphore(0);
 	
 	public Agent(String name) {
 		this.setName(name);
@@ -31,13 +33,13 @@ public class Agent extends Observable implements Runnable {
 			} else {
 				for(Message message : messages) {
 					switch(message.getAction()) {
-					case Request: 
-						break;
-					case Move:
-						this.move();
-						break;
-					case FreePosition: 
-						break;
+						case Request: 
+							break;
+						case Move:
+							this.move();
+							break;
+						case FreePosition: 
+							break;
 					}
 				}
 			}
@@ -54,12 +56,19 @@ public class Agent extends Observable implements Runnable {
 				this.getGrid().getSquares().put(neighbor, this);
 				this.setCurrentSquare(neighbor);
 				break;
-			} /*else {
-				Message message = new Message(this, this.getGrid().getSquares().get(neighbor), Action.FreePosition, this.getCurrentSquare());
-				this.getInbox().send(message);
-			}*/
+			} else {
+				try {
+					mutex.acquire();
+					Message message = new Message(this, this.getGrid().getSquares().get(neighbor), Action.FreePosition, this.getCurrentSquare());
+					this.getInbox().send(message);
+					mutex.release();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
+		// Notify update
 		setChanged();
 		this.getGrid().render();
 		this.notifyObservers(this);
