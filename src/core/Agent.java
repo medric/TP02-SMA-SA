@@ -1,6 +1,8 @@
 package core;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import core.Action;
 
@@ -8,16 +10,16 @@ import core.Action;
  * @author medric
  *
  */
-public class Agent implements Runnable {
+public class Agent extends Observable implements Runnable {
 	private String name;
 	private Square currentSquare;
 	private Square targetedSquare;
 	private Inbox inbox;
 	private Grid grid;
+	private Color bg;
 	
 	public Agent(String name) {
 		this.setName(name);
-
 	}
 	
 	public void run() {
@@ -32,6 +34,7 @@ public class Agent implements Runnable {
 					case Request: 
 						break;
 					case Move:
+						this.move();
 						break;
 					case FreePosition: 
 						break;
@@ -47,21 +50,26 @@ public class Agent implements Runnable {
 	public void move() {
 		for(Square neighbor : this.getGrid().getNeighbors(this.getCurrentSquare())) {
 			if(this.getGrid().isSquareFree(neighbor)) {
-				this.getGrid().getSquares().put(this.getCurrentSquare(), null);
+				this.free();
 				this.getGrid().getSquares().put(neighbor, this);
 				this.setCurrentSquare(neighbor);
 				break;
-			} else {
+			} /*else {
 				Message message = new Message(this, this.getGrid().getSquares().get(neighbor), Action.FreePosition, this.getCurrentSquare());
 				this.getInbox().send(message);
-			}
+			}*/
 		}
+		
+		setChanged();
+		this.getGrid().render();
+		this.notifyObservers(this);
 	}
 	
 	/**
 	 * 
 	 */
 	public void free() {
+		this.getGrid().getSquares().put(this.currentSquare, null);
 	}
 	
 	/*
@@ -139,5 +147,19 @@ public class Agent implements Runnable {
 	 */
 	public void setGrid(Grid grid) {
 		this.grid = grid;
+	}
+
+	/**
+	 * @return the bg
+	 */
+	public Color getBg() {
+		return bg;
+	}
+
+	/**
+	 * @param bg the bg to set
+	 */
+	public void setBg(Color bg) {
+		this.bg = bg;
 	}
 }

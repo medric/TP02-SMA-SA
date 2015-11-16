@@ -1,8 +1,10 @@
+import java.awt.Color;
 import java.util.ArrayList;
 
 import core.Agent;
 import core.Grid;
 import core.Inbox;
+import view.GridView;
 
 /**
  * 
@@ -43,6 +45,7 @@ public class Main {
 			inbox.addAgent(agent);
 			agent.setInbox(inbox);
 			agent.setGrid(grid);
+			agent.addObserver(grid.getGridView());
 		}
 		
 		//grid.placeAgents(agents);
@@ -52,6 +55,12 @@ public class Main {
 		triangle.setCurrentSquare(grid.getSquaresSet().get(3));
 		square.setCurrentSquare(grid.getSquaresSet().get(8));
 		diamond.setCurrentSquare(grid.getSquaresSet().get(7));
+		
+		circle.setBg(Color.BLACK);
+		star.setBg(Color.YELLOW);
+		triangle.setBg(Color.CYAN);
+		square.setBg(Color.GREEN);
+		diamond.setBg(Color.BLUE);
 		
 		// Set targets (squares)
 		circle.setTargetedSquare(grid.getSquaresSet().get(0));

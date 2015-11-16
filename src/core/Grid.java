@@ -19,15 +19,15 @@ import view.GridView;
  */
 public class Grid {
 	private HashMap<Square, Agent> squares;
-	//private GridView gridView;
+	private GridView gridView;
 	private int size;
 	
 	public Grid(int gridSize) {
 		this.squares = new HashMap<Square, Agent>();
-		//this.gridView = new GridView(gridSize, gridSize);
+	
 		this.setSize(gridSize);
-		
 		this.initGrid(gridSize);
+		this.setGridView(new GridView(this));	
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public class Grid {
 		for(int row = 0; row < gridSize; row++) {
 			for(int column = 0; column < gridSize; column++) {
 				Square square = new Square(new Position(row, column));
-				
+
 				this.squares.put(square, null);
 			}
 		}
@@ -73,7 +73,7 @@ public class Grid {
 	 */
 	public ArrayList<Square> getNeighbors(Square square) {
 		ArrayList<Square> neighbors = new ArrayList<Square>();
-		int index = this.getSquaresSet().indexOf(square) - 1;
+		int index = this.getSquaresSet().indexOf(square);
 		int gridSize = this.getSquares().size();
 		int gridWidth = (int)Math.sqrt(gridSize);
 		
@@ -94,10 +94,10 @@ public class Grid {
 		} 
 		
 		// top neighbor
-		if(square.getPosition().getY() > 0) {	
+		/*if(square.getPosition().getY() > 0) {	
 			int target = index - gridWidth;
 			neighbors.add(this.getSquaresSet().get(target));
-		} 
+		} */
 		
 		return neighbors;
 	}
@@ -169,5 +169,19 @@ public class Grid {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	/**
+	 * @return the gridView
+	 */
+	public GridView getGridView() {
+		return gridView;
+	}
+
+	/**
+	 * @param gridView the gridView to set
+	 */
+	public void setGridView(GridView gridView) {
+		this.gridView = gridView;
 	}
 }
