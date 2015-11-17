@@ -41,7 +41,7 @@ public class Inbox {
 		
 		if(recipientMessages != null) {
 			recipientMessages.add(message);
-			this.messages.put(message.getRecipient(), recipientMessages);
+			//this.messages.put(message.getRecipient(), recipientMessages);
 		}
 	}
 }

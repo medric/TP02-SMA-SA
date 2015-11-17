@@ -1,18 +1,8 @@
 package core;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
 import java.util.Random;
 
 import view.GridView;
-
-/**
- * 
- */
 
 /**
  * @author medric
@@ -22,6 +12,7 @@ public class Grid {
 	private ArrayList<ArrayList<Square>> squares;
 	private GridView gridView;
 	private int size;
+	private Random randomGenerator;
 	
 	public Grid(int gridSize) {
 		this.squares = new ArrayList<ArrayList<Square>>();
@@ -29,6 +20,8 @@ public class Grid {
 		this.setSize(gridSize);
 		this.initGrid(gridSize);
 		this.setGridView(new GridView(this));	
+		
+		randomGenerator = new Random();
 	}
 	
 	/**
@@ -36,10 +29,10 @@ public class Grid {
 	 * @param gridSize
 	 */
 	private void initGrid(int gridSize) {
-		for(int row = 0; row < gridSize; row++) {
+		for(int y = 0; y < gridSize; y++) {
 			ArrayList<Square> columns = new ArrayList<Square>(gridSize);
-			for(int column = 0; column < gridSize; column++) {
-				Square square = new Square(new Position(row, column));
+			for(int x = 0; x < gridSize; x++) {
+				Square square = new Square(new Position(x, y));
 				square.setAgent(null);
 				columns.add(square);
 			}
@@ -52,21 +45,20 @@ public class Grid {
 	 * @param agents
 	 */
 	public void placeAgents(ArrayList<Agent> agents) {		
-		/*Random random = new Random();
-		
+		int cursor = 0;
 		for(Agent agent : agents) {
-			int cursor = 0;
-			Square randomSquare = this.getSquaresSet().get(random.nextInt(this.squares.size()));
-			while(this.squares.get(randomSquare) != null && cursor < this.squares.size()) {
-				randomSquare = this.getSquaresSet().get(random.nextInt(this.squares.size()));
+			Square randomSquare = this.squares.get(randomGenerator.nextInt(this.squares.size())).get(randomGenerator.nextInt(this.squares.size()));
+			
+			while(this.isSquareFree(randomSquare) && cursor < this.squares.size() * this.squares.size()) {
+				randomSquare = this.squares.get(randomGenerator.nextInt(this.squares.size())).get(randomGenerator.nextInt(this.squares.size()));
 				cursor++;
 			}
 			
-			if(this.squares.get(randomSquare) == null) {
-				this.squares.put(randomSquare, agent);
+			if(this.isSquareFree(randomSquare)) {
+				randomSquare.setAgent(agent);
 				agent.setCurrentSquare(randomSquare);
 			}
-		}*/
+		}
 	}
 	
 	/**
@@ -105,6 +97,23 @@ public class Grid {
 	
 	/**
 	 * 
+	 * @param square
+	 * @return
+	 */
+	public ArrayList<Square> getFreeNeighbors(Square square) {
+		ArrayList<Square> freeNeighbors = new ArrayList<Square>();
+		
+		for(Square neighbor : this.getNeighbors(square)) {
+			if(this.isSquareFree(square)) {
+				freeNeighbors.add(neighbor);
+			}
+		}
+		
+		return freeNeighbors;
+	}
+	
+	/**
+	 * 
 	 * @param position
 	 * @return
 	 */
@@ -118,7 +127,7 @@ public class Grid {
 	 * @return
 	 */
 	public boolean isSquareFree(Square square) {
-		return square.getAgent() != null ;
+		return square.getAgent() == null ;
 	}
 	
 	/**
@@ -143,7 +152,7 @@ public class Grid {
 			for(Square square : row) { 
 				String output = "(" + square.getPosition().getX() + "-";
 				output += square.getPosition().getY() + ") :";
-				if(isSquareFree(square)) {
+				if(!isSquareFree(square)) {
 					output += square.getAgent().getName();
 				} else {
 					output += "free";

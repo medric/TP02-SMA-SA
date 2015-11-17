@@ -31,62 +31,72 @@ public class Agent extends Observable implements Runnable {
 	public void run() {
 		while(!this.targetReached()) {
 			ArrayList<Message> messages = this.getInbox().getMessages(this);
-			this.notifyObservers(this);
 			
 			if(messages.size() == 0 || messages == null) {
 				this.move();
 			} else {
 				for(Message message : messages) {
 					switch(message.getAction()) {
-						case Request: 
-							this.move();
-							break;
+						case Request:
+							try {
+								//mutex.acquire();
+								ArrayList<Square> freeNeighbors = this.grid.getFreeNeighbors(this.getCurrentSquare());
+								
+								if(freeNeighbors.size() > 0 ) {
+									this.free();
+									Message reply = new Message(this, message.getEmitter(), Action.Move, this.currentSquare);
+									this.getInbox().send(reply);
+									this.setCurrentSquare(freeNeighbors.get(0));
+									messages.remove(message);
+								}
+								
+								//mutex.release();
+								return;
+							} catch (Exception e) {
+								// TODO: handle exception
+							}
 						case Move:
-							Message reply = new Message(this, message.getEmitter(), Action.Request, message.getTarget());
-							this.getInbox().send(reply);
-							break;
+							this.free();
+							this.setCurrentSquare(message.getTarget());
+							return;
 						case FreePosition: 
-							break;
+							return;
 					}
 				}
 			}
+			
+			this.update();
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	public void move() {
-		// Random
-		/*ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
-		int index = randomGenerator.nextInt(neighbors.size() - 1);
-		Square neighbor = neighbors.get(index);
-		
-		// Random
-		this.free();
-		this.setCurrentSquare(neighbor);*/
-		
-		for(Square neighbor : this.getGrid().getNeighbors(this.getCurrentSquare())) {
+	public void move() {	
+		try {
+			//mutex.acquire(0);
+			
+			// Random
+			ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
+			int index = randomGenerator.nextInt(neighbors.size());
+			Square neighbor = neighbors.get(index);
+			
 			if(this.getGrid().isSquareFree(neighbor)) {
+				//mutex.acquire(0);
 				this.free();
 				this.setCurrentSquare(neighbor);
-				break;
+				//mutex.release(0);
 			} else {
-				try {
-					mutex.acquire();
-					Message message = new Message(this, neighbor.getAgent(), Action.Request, this.getCurrentSquare());
-					this.getInbox().send(message);
-					mutex.release();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				mutex.acquire(0);
+				Message message = new Message(this, neighbor.getAgent(), Action.Request, this.getCurrentSquare());
+				this.getInbox().send(message);
+				mutex.acquire(0);
 			}
+			
+			//mutex.release(0);
+		} catch(Exception e) {
+			
 		}
-		
-		// Notify update
-		setChanged();
-		this.getGrid().render();
-		this.notifyObservers(this);
 	}
 	
 	/**
@@ -186,5 +196,15 @@ public class Agent extends Observable implements Runnable {
 	 */
 	public void setBg(Color bg) {
 		this.bg = bg;
+	}
+	
+	/**
+	 * 
+	 */
+	private void update() {
+		// Notify update
+		setChanged();
+		this.getGrid().render();
+		this.notifyObservers(this);
 	}
 }
