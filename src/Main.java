@@ -50,11 +50,11 @@ public class Main {
 		
 		//grid.placeAgents(agents);
 		
-		circle.setCurrentSquare(grid.getSquaresSet().get(2));
-		star.setCurrentSquare(grid.getSquaresSet().get(4));
-		triangle.setCurrentSquare(grid.getSquaresSet().get(3));
-		square.setCurrentSquare(grid.getSquaresSet().get(8));
-		diamond.setCurrentSquare(grid.getSquaresSet().get(7));
+		circle.setCurrentSquare(grid.getSquares().get(0).get(0));
+		star.setCurrentSquare(grid.getSquares().get(2).get(1));
+		triangle.setCurrentSquare(grid.getSquares().get(2).get(2));
+		square.setCurrentSquare(grid.getSquares().get(4).get(1));
+		diamond.setCurrentSquare(grid.getSquares().get(3).get(1));
 		
 		circle.setBg(Color.BLACK);
 		star.setBg(Color.YELLOW);
@@ -63,11 +63,11 @@ public class Main {
 		diamond.setBg(Color.BLUE);
 		
 		// Set targets (squares)
-		circle.setTargetedSquare(grid.getSquaresSet().get(0));
-		star.setTargetedSquare(grid.getSquaresSet().get(1));
-		triangle.setTargetedSquare(grid.getSquaresSet().get(2));
-		square.setTargetedSquare(grid.getSquaresSet().get(3));
-		diamond.setTargetedSquare(grid.getSquaresSet().get(4));
+		circle.setTargetedSquare(grid.getSquares().get(0).get(4));
+		star.setTargetedSquare(grid.getSquares().get(3).get(2));
+		triangle.setTargetedSquare(grid.getSquares().get(0).get(0));
+		square.setTargetedSquare(grid.getSquares().get(4).get(2));
+		diamond.setTargetedSquare(grid.getSquares().get(4).get(4));
 		
 		// Run thread for each agent
 		for(Agent agent : agents) {

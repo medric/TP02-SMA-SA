@@ -62,11 +62,11 @@ public class Message {
 		this.action = action;
 	}
 
-	private Square getTarget() {
+	public Square getTarget() {
 		return target;
 	}
 
-	private void setTarget(Square target) {
+	public void setTarget(Square target) {
 		this.target = target;
 	}
 }

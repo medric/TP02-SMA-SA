@@ -9,6 +9,7 @@ package core;
  */
 public class Square {
 	private Position position;
+	private Agent agent;
 		
 	public Square(Position position) {
 		this.setPosition(position);
@@ -26,5 +27,19 @@ public class Square {
 	 */
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	/**
+	 * @return the agent
+	 */
+	public Agent getAgent() {
+		return agent;
+	}
+
+	/**
+	 * @param agent the agent to set
+	 */
+	public void setAgent(Agent agent) {
+		this.agent = agent;
 	}
 }

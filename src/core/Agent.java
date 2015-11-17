@@ -3,6 +3,7 @@ package core;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import core.Action;
@@ -18,15 +19,19 @@ public class Agent extends Observable implements Runnable {
 	private Inbox inbox;
 	private Grid grid;
 	private Color bg;
+	private Random randomGenerator;
 	static Semaphore mutex = new Semaphore(0);
 	
 	public Agent(String name) {
 		this.setName(name);
+		
+		randomGenerator = new Random();
 	}
 	
 	public void run() {
 		while(!this.targetReached()) {
 			ArrayList<Message> messages = this.getInbox().getMessages(this);
+			this.notifyObservers(this);
 			
 			if(messages.size() == 0 || messages == null) {
 				this.move();
@@ -34,9 +39,11 @@ public class Agent extends Observable implements Runnable {
 				for(Message message : messages) {
 					switch(message.getAction()) {
 						case Request: 
+							this.move();
 							break;
 						case Move:
-							this.move();
+							Message reply = new Message(this, message.getEmitter(), Action.Request, message.getTarget());
+							this.getInbox().send(reply);
 							break;
 						case FreePosition: 
 							break;
@@ -50,16 +57,24 @@ public class Agent extends Observable implements Runnable {
 	 * 
 	 */
 	public void move() {
+		// Random
+		/*ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
+		int index = randomGenerator.nextInt(neighbors.size() - 1);
+		Square neighbor = neighbors.get(index);
+		
+		// Random
+		this.free();
+		this.setCurrentSquare(neighbor);*/
+		
 		for(Square neighbor : this.getGrid().getNeighbors(this.getCurrentSquare())) {
 			if(this.getGrid().isSquareFree(neighbor)) {
 				this.free();
-				this.getGrid().getSquares().put(neighbor, this);
 				this.setCurrentSquare(neighbor);
 				break;
 			} else {
 				try {
 					mutex.acquire();
-					Message message = new Message(this, this.getGrid().getSquares().get(neighbor), Action.FreePosition, this.getCurrentSquare());
+					Message message = new Message(this, neighbor.getAgent(), Action.Request, this.getCurrentSquare());
 					this.getInbox().send(message);
 					mutex.release();
 				} catch (InterruptedException e) {
@@ -78,7 +93,7 @@ public class Agent extends Observable implements Runnable {
 	 * 
 	 */
 	public void free() {
-		this.getGrid().getSquares().put(this.currentSquare, null);
+		this.currentSquare.setAgent(null);
 	}
 	
 	/*
@@ -100,6 +115,7 @@ public class Agent extends Observable implements Runnable {
 	 */
 	public void setCurrentSquare(Square currentSquare) {
 		this.currentSquare = currentSquare;
+		this.currentSquare.setAgent(this);
 	}
 
 	/**
