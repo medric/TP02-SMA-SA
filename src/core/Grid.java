@@ -74,22 +74,22 @@ public class Grid {
 		
 		// right neighbor
 		if(square.getPosition().getX() < gridWidth - 1) {
-			neighbors.add(this.getSquares().get(square.getPosition().getX() + 1).get(square.getPosition().getY()));
+			neighbors.add(this.getSquares().get(square.getPosition().getY()).get(square.getPosition().getX() + 1));
 		} 
 		
 		// left neighbor
 		if(square.getPosition().getX() > 0) {
-			neighbors.add(this.getSquares().get(square.getPosition().getX() - 1).get(square.getPosition().getY()));
+			neighbors.add(this.getSquares().get(square.getPosition().getY()).get(square.getPosition().getX() - 1));
 		}
 		
 		// bottom neighbor
 		if(square.getPosition().getY() < gridWidth - 1) {	
-			neighbors.add(this.getSquares().get(square.getPosition().getX()).get(square.getPosition().getY() + 1));
+			neighbors.add(this.getSquares().get(square.getPosition().getY() + 1).get(square.getPosition().getX()));
 		} 
 		
 		// top neighbor
 		if(square.getPosition().getY() > 0) {	
-			neighbors.add(this.getSquares().get(square.getPosition().getX() + 1).get(square.getPosition().getY() - 1));
+			neighbors.add(this.getSquares().get(square.getPosition().getY() - 1).get(square.getPosition().getX()));
 		} 
 		
 		return neighbors;

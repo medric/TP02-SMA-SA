@@ -20,12 +20,13 @@ public class Agent extends Observable implements Runnable {
 	private Grid grid;
 	private Color bg;
 	private Random randomGenerator;
-	static Semaphore mutex = new Semaphore(0);
+	private static Semaphore mutex;
 	
-	public Agent(String name) {
+	public Agent(String name, Semaphore _mutex) {
 		this.setName(name);
 		
 		randomGenerator = new Random();
+		mutex = _mutex;
 	}
 	
 	public void run() {
@@ -35,33 +36,37 @@ public class Agent extends Observable implements Runnable {
 			if(messages.size() == 0 || messages == null) {
 				this.move();
 			} else {
-				for(Message message : messages) {
-					switch(message.getAction()) {
-						case Request:
-							try {
-								//mutex.acquire();
+				try {
+					//mutex.acquire(0);
+				
+					for(Message message : messages) {
+						switch(message.getAction()) {
+							case Request:
+								
 								ArrayList<Square> freeNeighbors = this.grid.getFreeNeighbors(this.getCurrentSquare());
 								
 								if(freeNeighbors.size() > 0 ) {
 									this.free();
-									Message reply = new Message(this, message.getEmitter(), Action.Move, this.currentSquare);
+									Message reply = new Message(this, message.getEmitter(), Action.Move, this.getCurrentSquare());
 									this.getInbox().send(reply);
 									this.setCurrentSquare(freeNeighbors.get(0));
-									messages.remove(message);
 								}
-								
-								//mutex.release();
-								return;
-							} catch (Exception e) {
-								// TODO: handle exception
-							}
-						case Move:
-							this.free();
-							this.setCurrentSquare(message.getTarget());
-							return;
-						case FreePosition: 
-							return;
+								break;
+	
+							case Move:
+								this.free();
+								this.setCurrentSquare(message.getTarget());
+								break;
+							case FreePosition: 
+								break;
+						}
+						
+						messages.remove(message);
 					}
+					
+					//mutex.release(0);
+				} catch(Exception e) {
+					
 				}
 			}
 			
@@ -73,30 +78,19 @@ public class Agent extends Observable implements Runnable {
 	 * 
 	 */
 	public void move() {	
-		try {
-			//mutex.acquire(0);
-			
-			// Random
-			ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
-			int index = randomGenerator.nextInt(neighbors.size());
-			Square neighbor = neighbors.get(index);
-			
-			if(this.getGrid().isSquareFree(neighbor)) {
-				//mutex.acquire(0);
-				this.free();
-				this.setCurrentSquare(neighbor);
-				//mutex.release(0);
-			} else {
-				mutex.acquire(0);
-				Message message = new Message(this, neighbor.getAgent(), Action.Request, this.getCurrentSquare());
-				this.getInbox().send(message);
-				mutex.acquire(0);
-			}
-			
-			//mutex.release(0);
-		} catch(Exception e) {
-			
+		// Random
+		ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
+		int index = randomGenerator.nextInt(neighbors.size());
+		Square neighbor = neighbors.get(index);
+		
+		if(this.getGrid().isSquareFree(neighbor)) {
+			this.free();
+			this.setCurrentSquare(neighbor);
+		} else {
+			Message message = new Message(this, neighbor.getAgent(), Action.Request, this.getCurrentSquare());
+			this.getInbox().send(message);
 		}
+
 	}
 	
 	/**

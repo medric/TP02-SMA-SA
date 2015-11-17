@@ -1,10 +1,10 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import core.Agent;
 import core.Grid;
 import core.Inbox;
-import view.GridView;
 
 /**
  * 
@@ -23,11 +23,13 @@ public class Main {
 		// Init grid
 		Grid grid = new Grid(5);
 		
-		Agent circle = new Agent("circle");
-		Agent star = new Agent("star");
-		Agent triangle = new Agent("triangle");
-		Agent square = new Agent("square");
-		Agent diamond = new Agent("diamond");
+		Semaphore mutex = new Semaphore(0);
+		
+		Agent circle = new Agent("circle", mutex);
+		Agent star = new Agent("star", mutex);
+		Agent triangle = new Agent("triangle", mutex);
+		Agent square = new Agent("square", mutex);
+		Agent diamond = new Agent("diamond", mutex);
 		
 		// Set agents
 		ArrayList<Agent> agents = new ArrayList<Agent>();
