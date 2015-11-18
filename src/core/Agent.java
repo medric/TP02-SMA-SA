@@ -37,8 +37,6 @@ public class Agent extends Observable implements Runnable {
 				this.move();
 			} else {
 				try {
-					//mutex.acquire(0);
-				
 					for(Message message : messages) {
 						switch(message.getAction()) {
 							case Request:
@@ -54,8 +52,10 @@ public class Agent extends Observable implements Runnable {
 								break;
 	
 							case Move:
-								this.free();
-								this.setCurrentSquare(message.getTarget());
+								if(this.getGrid().isSquareFree(message.getTarget())) {
+									this.free();
+									this.setCurrentSquare(message.getTarget());
+								}
 								break;
 							case FreePosition: 
 								break;
@@ -64,7 +64,6 @@ public class Agent extends Observable implements Runnable {
 						messages.remove(message);
 					}
 					
-					//mutex.release(0);
 				} catch(Exception e) {
 					
 				}
