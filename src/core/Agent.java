@@ -44,10 +44,12 @@ public class Agent extends Observable implements Runnable {
 								ArrayList<Square> freeNeighbors = this.grid.getFreeNeighbors(this.getCurrentSquare());
 								
 								if(freeNeighbors.size() > 0 ) {
+									Square neighbor = getRandomNeighbor(freeNeighbors);
+									
 									this.free();
 									Message reply = new Message(this, message.getEmitter(), Action.Move, this.getCurrentSquare());
 									this.getInbox().send(reply);
-									this.setCurrentSquare(freeNeighbors.get(0));
+									this.setCurrentSquare(neighbor);
 								}
 								break;
 	
@@ -79,8 +81,8 @@ public class Agent extends Observable implements Runnable {
 	public void move() {	
 		// Random
 		ArrayList<Square> neighbors = this.getGrid().getNeighbors(this.getCurrentSquare());
-		int index = randomGenerator.nextInt(neighbors.size());
-		Square neighbor = neighbors.get(index);
+
+		Square neighbor = getRandomNeighbor(neighbors);
 		
 		if(this.getGrid().isSquareFree(neighbor)) {
 			this.free();
@@ -90,6 +92,16 @@ public class Agent extends Observable implements Runnable {
 			this.getInbox().send(message);
 		}
 
+	}
+	
+	/**
+	 * 
+	 * @param neighbors
+	 * @return
+	 */
+	private Square getRandomNeighbor(ArrayList<Square> neighbors) {
+		int index = randomGenerator.nextInt(neighbors.size());
+		return neighbors.get(index);
 	}
 	
 	/**
