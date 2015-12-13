@@ -96,7 +96,7 @@ public class Grid {
 	}
 	
 	/**
-	 * 
+	 * Get neighbors that have no agent on
 	 * @param square
 	 * @return
 	 */
@@ -138,7 +138,7 @@ public class Grid {
 	}
 
 	/**
-	 * @param cases the cases to set
+	 * @param squares the squares to set
 	 */
 	public void setSquares(ArrayList<ArrayList<Square>> squares) {
 		this.squares = squares;
@@ -164,18 +164,6 @@ public class Grid {
 		System.out.println("________________");
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public ArrayList<Square> getShortestWay(Square startingSquare, Square targetedSquare) {
-		ArrayList<Square> shortestWay = new ArrayList<Square>();
-		
-		// TODO
-		
-		return shortestWay;
-	}
-
 	public int getSize() {
 		return size;
 	}

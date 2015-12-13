@@ -1,14 +1,9 @@
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 import core.Agent;
 import core.Grid;
 import core.Inbox;
-
-/**
- * 
- */
 
 /**
  * @author medric
@@ -21,15 +16,14 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// Init grid
-		Grid grid = new Grid(5);
-		
-		Semaphore mutex = new Semaphore(0);
-		
-		Agent circle = new Agent("circle", mutex);
-		Agent star = new Agent("star", mutex);
-		Agent triangle = new Agent("triangle", mutex);
-		Agent square = new Agent("square", mutex);
-		Agent diamond = new Agent("diamond", mutex);
+		Grid grid = new Grid(6);
+
+		Agent circle = new Agent("circle");
+		Agent star = new Agent("star");
+		Agent triangle = new Agent("triangle");
+		Agent square = new Agent("square");
+		Agent diamond = new Agent("diamond");
+		Agent rectangle = new Agent("rectangle");
 		
 		// Set agents
 		ArrayList<Agent> agents = new ArrayList<Agent>();
@@ -39,6 +33,7 @@ public class Main {
 		agents.add(triangle);
 		agents.add(square);
 		agents.add(diamond);
+		agents.add(rectangle);
 		
 		Inbox inbox = new Inbox();
 		
@@ -53,16 +48,18 @@ public class Main {
 		//grid.placeAgents(agents);
 		
 		circle.setCurrentSquare(grid.getSquares().get(0).get(0));
-		star.setCurrentSquare(grid.getSquares().get(2).get(1));
+		star.setCurrentSquare(grid.getSquares().get(2).get(4));
 		triangle.setCurrentSquare(grid.getSquares().get(2).get(2));
 		square.setCurrentSquare(grid.getSquares().get(4).get(1));
 		diamond.setCurrentSquare(grid.getSquares().get(3).get(1));
+		rectangle.setCurrentSquare(grid.getSquares().get(2).get(1));
 		
 		circle.setBg(Color.BLACK);
 		star.setBg(Color.YELLOW);
 		triangle.setBg(Color.CYAN);
 		square.setBg(Color.GREEN);
 		diamond.setBg(Color.BLUE);
+		rectangle.setBg(Color.RED);
 		
 		// Set targets (squares)
 		circle.setTargetedSquare(grid.getSquares().get(0).get(4));
@@ -70,6 +67,7 @@ public class Main {
 		triangle.setTargetedSquare(grid.getSquares().get(0).get(0));
 		square.setTargetedSquare(grid.getSquares().get(4).get(2));
 		diamond.setTargetedSquare(grid.getSquares().get(4).get(4));
+		rectangle.setTargetedSquare(grid.getSquares().get(1).get(2));
 		
 		// Run thread for each agent
 		for(Agent agent : agents) {
