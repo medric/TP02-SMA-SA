@@ -57,6 +57,9 @@ public class Grid {
 			if(this.isSquareFree(randomSquare)) {
 				randomSquare.setAgent(agent);
 				agent.setCurrentSquare(randomSquare);
+				
+				Square target = this.squares.get(randomGenerator.nextInt(this.squares.size())).get(randomGenerator.nextInt(this.squares.size()));
+				agent.setTargetedSquare(target);
 			}
 		}
 	}
