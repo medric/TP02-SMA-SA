@@ -45,13 +45,11 @@ public class Grid {
 	 * @param agents
 	 */
 	public void placeAgents(ArrayList<Agent> agents) {		
-		int cursor = 0;
 		for(Agent agent : agents) {
 			Square randomSquare = this.squares.get(randomGenerator.nextInt(this.squares.size())).get(randomGenerator.nextInt(this.squares.size()));
 			
-			while(this.isSquareFree(randomSquare) && cursor < this.squares.size() * this.squares.size()) {
+			while(!this.isSquareFree(randomSquare)) {
 				randomSquare = this.squares.get(randomGenerator.nextInt(this.squares.size())).get(randomGenerator.nextInt(this.squares.size()));
-				cursor++;
 			}
 			
 			if(this.isSquareFree(randomSquare)) {
