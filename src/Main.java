@@ -45,14 +45,14 @@ public class Main {
 			agent.addObserver(grid.getGridView());
 		}
 		
-		//grid.placeAgents(agents);
+		grid.placeAgents(agents);
 		
-		circle.setCurrentSquare(grid.getSquares().get(0).get(0));
+		/*circle.setCurrentSquare(grid.getSquares().get(0).get(0));
 		star.setCurrentSquare(grid.getSquares().get(2).get(4));
 		triangle.setCurrentSquare(grid.getSquares().get(2).get(2));
 		square.setCurrentSquare(grid.getSquares().get(4).get(1));
 		diamond.setCurrentSquare(grid.getSquares().get(3).get(1));
-		rectangle.setCurrentSquare(grid.getSquares().get(2).get(1));
+		rectangle.setCurrentSquare(grid.getSquares().get(2).get(1));*/
 		
 		circle.setBg(Color.BLACK);
 		star.setBg(Color.YELLOW);
@@ -62,13 +62,13 @@ public class Main {
 		rectangle.setBg(Color.RED);
 		
 		// Set targets (squares)
-		circle.setTargetedSquare(grid.getSquares().get(0).get(4));
+		/*circle.setTargetedSquare(grid.getSquares().get(0).get(4));
 		star.setTargetedSquare(grid.getSquares().get(3).get(2));
 		triangle.setTargetedSquare(grid.getSquares().get(0).get(0));
 		square.setTargetedSquare(grid.getSquares().get(4).get(2));
 		diamond.setTargetedSquare(grid.getSquares().get(4).get(4));
-		rectangle.setTargetedSquare(grid.getSquares().get(1).get(2));
-		
+		rectangle.setTargetedSquare(grid.getSquares().get(1).get(2));*/
+	
 		// Run thread for each agent
 		for(Agent agent : agents) {
 			Thread t = new Thread(agent);
