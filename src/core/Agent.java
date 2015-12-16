@@ -200,7 +200,7 @@ public class Agent extends Observable implements Runnable {
 	public Color getBg() {
 		return bg;
 	}
-
+	
 	/**
 	 * @param bg the bg to set
 	 */
