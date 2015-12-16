@@ -93,7 +93,7 @@ public class Grid {
 		if(square.getPosition().getY() > 0) {	
 			neighbors.add(this.getSquares().get(square.getPosition().getY() - 1).get(square.getPosition().getX()));
 		} 
-		System.out.println(neighbors.size());
+
 		return neighbors;
 	}
 	
