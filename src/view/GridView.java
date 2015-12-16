@@ -58,7 +58,7 @@ public class GridView extends JFrame implements Observer {
 	}
 	
 	/*
-	 * 
+	 * Draw grid
 	 */
 	private void draw() {
 		for (ArrayList<Square> row : this.grid.getSquares()) {
@@ -76,7 +76,7 @@ public class GridView extends JFrame implements Observer {
 	}
 	
 	/**
-	 * 
+	 *  Refresh view
 	 */
 	private void refresh() {
 		for (int v = 0; v < this.grid.getSize(); v++) {

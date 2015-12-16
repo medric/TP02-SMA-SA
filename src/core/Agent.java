@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import core.Action;
 
@@ -27,8 +28,10 @@ public class Agent extends Observable implements Runnable {
 	}
 	
 	public void run() {
-		while(!this.targetReached()) {
-			ArrayList<Message> messages = this.getInbox().getMessages(this);
+		while(!grid.agentsSatisfied()) {
+			CopyOnWriteArrayList<Message> messages = this.getInbox().getMessages(this);
+			
+			this.update();
 			
 			if(messages.size() == 0 || messages == null) {
 				this.move();
@@ -62,12 +65,12 @@ public class Agent extends Observable implements Runnable {
 					}
 					
 				} catch(Exception e) {
-					
+					System.err.println(e);
 				}
 			}
-			
-			this.update();
 		}
+		
+		System.out.println("Agent " + this.getName() + " satisfait");
 	}
 	
 	/**
@@ -96,7 +99,7 @@ public class Agent extends Observable implements Runnable {
 	}
 	
 	/**
-	 * 
+	 * Get a random neighbor
 	 * @param neighbors
 	 * @return
 	 */
@@ -106,17 +109,17 @@ public class Agent extends Observable implements Runnable {
 	}
 	
 	/**
-	 * 
+	 *  Free current square
 	 */
 	public void free() {
 		this.getCurrentSquare().setAgent(null);
 	}
 	
 	/*
-	 * 
+	 * Check if target is reached
 	 */
-	private boolean targetReached() {
-		return getCurrentSquare().equals(targetedSquare);
+	public boolean targetReached() {
+		return getCurrentSquare().equals(this.getTargetedSquare());
 	}
 
 	/**

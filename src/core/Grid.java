@@ -10,8 +10,10 @@ import view.GridView;
  */
 public class Grid {
 	private ArrayList<ArrayList<Square>> squares;
+	private ArrayList<Agent> agents;
 	private GridView gridView;
 	private int size;
+	
 	private Random randomGenerator;
 	
 	public Grid(int gridSize) {
@@ -71,10 +73,9 @@ public class Grid {
 		ArrayList<Square> neighbors = new ArrayList<Square>();
 		
 		int gridSize = this.getSquares().size();
-		int gridWidth = (int)Math.sqrt(gridSize);
 		
 		// right neighbor
-		if(square.getPosition().getX() < gridWidth - 1) {
+		if(square.getPosition().getX() < gridSize - 1) {
 			neighbors.add(this.getSquares().get(square.getPosition().getY()).get(square.getPosition().getX() + 1));
 		} 
 		
@@ -84,7 +85,7 @@ public class Grid {
 		}
 		
 		// bottom neighbor
-		if(square.getPosition().getY() < gridWidth - 1) {	
+		if(square.getPosition().getY() < gridSize - 1) {	
 			neighbors.add(this.getSquares().get(square.getPosition().getY() + 1).get(square.getPosition().getX()));
 		} 
 		
@@ -92,7 +93,7 @@ public class Grid {
 		if(square.getPosition().getY() > 0) {	
 			neighbors.add(this.getSquares().get(square.getPosition().getY() - 1).get(square.getPosition().getX()));
 		} 
-		
+		System.out.println(neighbors.size());
 		return neighbors;
 	}
 	
@@ -185,5 +186,28 @@ public class Grid {
 	 */
 	public void setGridView(GridView gridView) {
 		this.gridView = gridView;
+	}
+	
+	public ArrayList<Agent> getAgents() {
+		return agents;
+	}
+
+	public void setAgents(ArrayList<Agent> agents) {
+		this.agents = agents;
+	}
+	
+	/**
+	 * Check for every agent satisfaction
+	 * @param agents
+	 * @return
+	 */
+	public boolean agentsSatisfied() {
+		boolean satisfied = true;
+		for(Agent agent : agents) {
+			if(!agent.targetReached()) {
+				satisfied = false;
+			}
+		}
+		return satisfied;
 	}
 }

@@ -1,26 +1,19 @@
-/**
- * 
- */
 package core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * @author medric
- *
- */
 public class Inbox {
-	private HashMap<Agent, ArrayList<Message>> messages;
+	private ConcurrentHashMap<Agent, CopyOnWriteArrayList<Message>> messages;
 	
 	public Inbox() {
-		this.messages = new HashMap<Agent, ArrayList<Message>>();
+		this.messages = new ConcurrentHashMap<Agent, CopyOnWriteArrayList<Message>>();
 	}
 	
 	/**
 	 * @return the messages
 	 */
-	ArrayList<Message> getMessages(Agent agent) {
+	CopyOnWriteArrayList<Message> getMessages(Agent agent) {
 		return this.messages.get(agent);
 	}
 	
@@ -29,7 +22,7 @@ public class Inbox {
 	 * @param agent
 	 */
 	public void addAgent(Agent agent) {
-		this.messages.put(agent, new ArrayList<Message>());
+		this.messages.put(agent, new CopyOnWriteArrayList<Message>());
 	}
 	
 	/**
@@ -37,11 +30,13 @@ public class Inbox {
 	 * @param message
 	 */
 	public void send(Message message) {
-		ArrayList<Message> recipientMessages = this.messages.get(message.getRecipient());
+		CopyOnWriteArrayList<Message> recipientMessages = this.messages.get(message.getRecipient());
 		
-		if(recipientMessages != null) {
-			recipientMessages.add(message);
-			//this.messages.put(message.getRecipient(), recipientMessages);
+		if(recipientMessages == null) {
+			recipientMessages = new CopyOnWriteArrayList<Message>();
 		}
+		
+		recipientMessages.add(message);
+		this.messages.put(message.getRecipient(), recipientMessages);
 	}
 }
