@@ -70,6 +70,7 @@ public class Agent extends Observable implements Runnable {
 			}
 		}
 		
+		this.update();
 		System.out.println("Agent " + this.getName() + " satisfait");
 	}
 	
